@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Money</title>
+  <style>
+    table {
+        width: 50%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 18px;
+        text-align: left;
+    }
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+</head>
+<body>
+  <h1>Currency Exchange Rates</h1>
+  <h2>1 EUR</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Currency</th>
+        <th>Rate</th>
+      </tr>
+    </thead>
+    <tbody class="table__body"></tbody>
+  </table>
+  <script>
+    const tableBody = document.querySelector('.table__body');
+    const userKey = '81ff8c71311953bcfae63018a5943092';
+    
+    function populateTable() {
+      fetch(`https://api.exchangeratesapi.io/v1/latest?access_key=${userKey}`)
+      .then(response => response.json())
+      .then(data => {
+        const rate = data.rates;
+        tableBody.textContent = '';
+        
+        for (const currency in rate) { 
+          const row = document.createElement('tr');
+          const cellCurrency = document.createElement('td');
+          cellCurrency.textContent = currency;
+          row.appendChild(cellCurrency);
+          const cellRate = document.createElement('td');
+          cellRate.textContent = rate[currency];
+          row.appendChild(cellRate);
+          tableBody.appendChild(row);
+        }          
+      })
+      .catch((error) => {
+        console.log(`Ошибка (${error.message})`);
+      })
+    };
+
+    populateTable();
+    setInterval(() => { populateTable(); }, 60000);
+  </script>
+</body>
+</html>
