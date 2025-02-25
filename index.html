@@ -42,28 +42,32 @@
     
     function populateTable() {
       fetch(`https://api.exchangeratesapi.io/v1/latest?access_key=${userKey}`)
-      .then(response => response.json())
-      .then(data => {
-        const rate = data.rates;
-        tableBody.textContent = '';
-        
-        for (const currency in rate) { 
-          const row = document.createElement('tr');
-          const cellCurrency = document.createElement('td');
-          cellCurrency.textContent = currency;
-          row.appendChild(cellCurrency);
-          const cellRate = document.createElement('td');
-          cellRate.textContent = rate[currency];
-          row.appendChild(cellRate);
-          tableBody.appendChild(row);
-        }          
-      })
-      .catch((error) => {
-        console.log(`Ошибка (${error.message})`);
-      })
+        .then(response => response.json())
+        .then(data => {
+          const rate = data.rates;
+          tableBody.textContent = '';
+          
+          for (const currency in rate) { 
+            const row = document.createElement('tr');
+            const cellCurrency = document.createElement('td');
+
+            cellCurrency.textContent = currency;
+            row.appendChild(cellCurrency);
+
+            const cellRate = document.createElement('td');
+            cellRate.textContent = rate[currency];
+            row.appendChild(cellRate);
+
+            tableBody.appendChild(row);
+          }          
+        })
+        .catch((error) => {
+          console.log(`Ошибка (${error.message})`);
+        })
     };
 
     populateTable();
+    
     setInterval(() => { populateTable(); }, 60000);
   </script>
 </body>
